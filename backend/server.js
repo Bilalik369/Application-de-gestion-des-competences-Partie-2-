@@ -1,3 +1,4 @@
+
 import express from "express";
 import dotenv, { config } from "dotenv";
 
@@ -11,3 +12,5 @@ const PORT = process.env.PORT
 app.listen(PORT , ()=>{
     console.log(`server is ranning in PORT ${PORT}`)
 })
+
+
