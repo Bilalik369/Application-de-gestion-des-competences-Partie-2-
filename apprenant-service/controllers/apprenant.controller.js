@@ -78,3 +78,15 @@ export const getApprenantById = async (req, res) => {
       res.status(400).json({ error: error.message });
     }
   };
+
+  export const deleteApprenant = async (req, res) => {
+    try {
+      const deletedApprenant = await Apprenant.findByIdAndDelete(req.params.id);
+      if (!deletedApprenant) {
+        return res.status(404).json({ message: "Apprenant non trouvé" });
+      }
+      res.status(200).json({ message: "Apprenant supprimé avec succès" });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  };
