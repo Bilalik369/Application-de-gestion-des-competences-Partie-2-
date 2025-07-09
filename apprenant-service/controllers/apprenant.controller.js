@@ -26,3 +26,26 @@ const fetchBriefById  = async()=>{
     }
     
 }
+
+
+
+export const getAllApprenants = async(req , res)=>{
+    try {
+        const apprenants  = await Apprenant.find().sort({nom : 1});
+        res.status( 201).json({apprenants})
+    } catch (error) {
+        res.status(500).json({error : error.message})
+    }
+};
+
+export const getApprenantById = async (req, res) => {
+    try {
+      const apprenant = await Apprenant.findById(req.params.id);
+      if (!apprenant) {
+        return res.status(404).json({ message: "Apprenant non trouvé" });
+      }
+      res.status(200).json(apprenant);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  };
