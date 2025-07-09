@@ -49,3 +49,14 @@ export const getApprenantById = async (req, res) => {
       res.status(500).json({ error: error.message });
     }
   };
+
+  export const createApprenant = async (req, res) => {
+    try {
+      const newApprenant = new Apprenant(req.body);
+      await newApprenant.save();
+      res.status(201).json(newApprenant);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  };
+
