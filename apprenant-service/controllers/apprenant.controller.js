@@ -60,3 +60,21 @@ export const getApprenantById = async (req, res) => {
     }
   };
 
+
+  export const updateApprenant = async (req, res) => {
+    try {
+      const updatedApprenant = await Apprenant.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        { new: true, runValidators: true }
+      );
+      
+      if (!updatedApprenant) {
+        return res.status(404).json({ message: "Apprenant non trouvé" });
+      }
+      
+      res.status(200).json(updatedApprenant);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  };
