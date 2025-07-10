@@ -90,3 +90,31 @@ export const getApprenantById = async (req, res) => {
       res.status(500).json({ error: error.message });
     }
   };
+  export const getBriefsParApprenant = async (req, res) => {
+    try {
+      const apprenantId = req.params.id;
+      
+   
+      const apprenant = await Apprenant.findById(apprenantId);
+      if (!apprenant) {
+        return res.status(404).json({ message: "Apprenant non trouvé" });
+      }
+      
+     
+      const rendus = await Rendu.find({ apprenantId }).sort({ dateRendu: -1 });
+      
+     
+      const briefsAffectes = rendus.map(rendu => ({
+        briefId: rendu.briefId,
+        briefTitre: rendu.briefTitre,
+        statutRendu: rendu.statut,
+        dateRendu: rendu.dateRendu,
+        note: rendu.note,
+        competencesAttendues: rendu.competencesAttendues
+      }));
+      
+      res.status(200).json(briefsAffectes);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  };
