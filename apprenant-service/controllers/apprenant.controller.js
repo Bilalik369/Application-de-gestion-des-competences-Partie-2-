@@ -118,3 +118,73 @@ export const getApprenantById = async (req, res) => {
       res.status(500).json({ error: error.message });
     }
   };
+
+  export const affecterBrief = async (req, res) => {
+    try {
+      const { id: apprenantId, briefId } = req.params;
+      
+      const apprenant = await Apprenant.findById(apprenantId);
+      if (!apprenant) {
+        return res.status(404).json({ message: "Apprenant non trouvé" });
+      }
+      
+ 
+      const brief = await fetchBriefById(briefId);
+      
+      const renduExistant = await Rendu.findOne({ apprenantId, briefId });
+      if (renduExistant) {
+        return res.status(400).json({ message: "Brief déjà affecté à cet apprenant" });
+      }
+      
+    
+      const nouveauRendu = new Rendu({
+        apprenantId,
+        briefId,
+        briefTitre: brief.titre,
+        lienRendu: "https://placeholder.com",
+        statut: "en_cours_evaluation",
+        competencesAttendues: brief.competences || []
+      });
+      
+      await nouveauRendu.save();
+      
+      res.status(201).json({
+        message: "Brief affecté avec succès",
+        rendu: nouveauRendu
+      });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  };
+
+
+  export const soumettreRendu = async (req, res) => {
+    try {
+      const { apprenantId, briefId, lienRendu, description } = req.body;
+      
+      
+      const apprenant = await Apprenant.findById(apprenantId);
+      if (!apprenant) {
+        return res.status(404).json({ message: "Apprenant non trouvé" });
+      }
+      
+      const brief = await fetchBriefById(briefId);
+      
+    
+      const nouveauRendu = new Rendu({
+        apprenantId,
+        briefId,
+        briefTitre: brief.titre,
+        lienRendu,
+        description,
+        statut: "soumis",
+        competencesAttendues: brief.competences || []
+      });
+      
+      await nouveauRendu.save();
+      
+      res.status(201).json(nouveauRendu);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  };
