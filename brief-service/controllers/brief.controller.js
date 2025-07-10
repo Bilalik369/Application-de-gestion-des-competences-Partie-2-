@@ -1,4 +1,4 @@
-import Breif from '../models/Brief.model'
+import Brief from '../models/Brief.model.js';
 import axios from 'axios';
 const COMPETENCE_SERVICE_URL = process.env.COMPETENCE_SERVICE_URL || 'http://localhost:3001';
 const fetchCompetencesFromService = async () => {
